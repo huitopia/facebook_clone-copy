@@ -26,13 +26,13 @@ router.post('/register', async (req, res) => {
     const { userName, userEmail, password, confirmPassword } = await registerSchema.validateAsync(req.body)
     if (userName === password) {
       res.status(400).send({
-        errorMessage: "아이디, 비밀번호가 같습니다.", success: false
+        errorMessage: "아이디, 비밀번호가 같습니다."
       })
       return
     }
     else if (userEmail === password) {
       res.status(400).send({
-        errorMessage: "이메일, 비밀번호가 같습니다.", success: false
+        errorMessage: "이메일, 비밀번호가 같습니다."
       })
       return
     }
@@ -41,12 +41,12 @@ router.post('/register', async (req, res) => {
     const eMail = await User.find({ userEmail: userEmail })
     if (eMail.length !== 0) {
       res.status(400).send({
-        errorMessage: "이메일이 중복되었습니다.", success: false
+        errorMessage: "이메일이 중복되었습니다."
       })
       return
     } else if (password !== confirmPassword) {
       res.status(400).send({
-        errorMessage: "동일한 비밀번호가 아닙니다.", success: false
+        errorMessage: "동일한 비밀번호가 아닙니다."
       })
       return
     }
@@ -58,11 +58,11 @@ router.post('/register', async (req, res) => {
     await User.create({ userId, userName, userEmail, hashedPassword });
 
     res.status(201).send({
-      result: "success", success:true
+      result: "회원가입 완료"
     })
   } catch (err) {
     res.status(400).send({
-      errorMessage: "입력한 내용을 다시 확인 해주세요", success: false
+      errorMessage: "입력한 내용을 다시 확인 해주세요"
     })
   }
 })
