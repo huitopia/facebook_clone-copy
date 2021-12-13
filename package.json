@@ -1,0 +1,31 @@
+{
+  "name": "facebook_clone_copy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huitopia/facebook_clone_copy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huitopia/facebook_clone_copy/issues"
+  },
+  "homepage": "https://github.com/huitopia/facebook_clone_copy#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
+    "debug": "^4.3.3",
+    "express": "^4.17.1",
+    "joi": "^17.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.1",
+    "morgan": "^1.10.0",
+    "swagger-autogen": "^2.17.2",
+    "swagger-ui-express": "^4.2.0"
+  }
+}
