@@ -23,6 +23,7 @@ router.post('/register', async (req, res) => {
     if(recentUser.length != 0){
       userId = recentUser[0]['userId'] + 1
     }
+
     const { userName, userEmail, password, confirmPassword } = await registerSchema.validateAsync(req.body)
     if (userName === password) {
       res.status(400).send({
@@ -55,7 +56,13 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     console.log("bcrypt 작동 확인")
-    await User.create({ userId, userName, userEmail, hashedPassword });
+
+    const createAt = new Date(+new Date() + 3240 * 10000)
+      .toISOString()
+      .replace('T', ' ')
+      .replace(/\..*/, '')
+    
+    await User.create({ userId, userName, userEmail, hashedPassword, createAt });
 
     res.status(201).send({
       result: "회원가입 완료"

@@ -13,6 +13,10 @@ router.post('/comments/:postId', authMiddleware, async (req, res) => {
     const userName = user["userName"]
     // console.log("##########userId##########: ", userId)
     // console.log("##########userName##########: ", userName)
+    const createAt = new Date(+new Date() + 3240 * 10000)
+      .toISOString()
+      .replace('T', ' ')
+      .replace(/\..*/, '')
 
     try {
         if (content === undefined) {
@@ -27,7 +31,7 @@ router.post('/comments/:postId', authMiddleware, async (req, res) => {
         if (recentComment.length !== 0) {
             commentId = recentComment[0]["commentId"] + 1
         }
-        await Comments.create({ commentId, postId, userId, userName, content })
+        await Comments.create({ commentId, postId, userId, userName, content, createAt })
         res.status(201).send({
             result: "댓글 등록 완료"
         })
