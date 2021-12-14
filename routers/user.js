@@ -123,4 +123,19 @@ router.get('/me', authMiddleware, async(req, res) => {
 
 })
 
+// 검색
+router.post('/post/search', async(req, res) => {
+  // 검색창에 user 검색
+  const searchUser = req.body;
+  console.log(searchUser['userName'])
+  try{
+    const tag = searchUser['userName'].trim();
+    const search = await User.find({ userName: new RegExp(tag,'i')}).sort('-createdAt')
+    res.status(200).send({ result: {search}})
+    console.log(search)
+  } catch(error){
+    res.status(400).send({ errorMessage: "검색중 오류 발생"})
+  }
+})
+
 module.exports = router

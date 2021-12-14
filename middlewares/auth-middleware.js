@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
 
     if (tokenType !== 'Bearer') {
         res.status(401).send({
-            errorMessage: '로그인 후 사용하세요1.',
+            errorMessage: '로그인 후 사용하세요.',
         })
         return
     }

@@ -65,7 +65,7 @@ router.post('/post', authMiddleware, upload.single('img'), async (req, res) => {
     res.send({ result: 'success' })
 })
 // 게시글 수정페이지 로딩
-router.get("/modify/:postId", async (req, res, next) => {
+router.get("/modify/:postId",authMiddleware, async (req, res, next) => {
     try {
         const { postId } = req.params;
         const post = await Posts.findOne({ postId }).exec();
@@ -184,5 +184,6 @@ router.post("/:postId/like", authMiddleware, async (req, res) => {
         res.send(result = { data: true })
     }
 })
+
 
 module.exports = router
