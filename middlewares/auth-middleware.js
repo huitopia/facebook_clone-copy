@@ -7,23 +7,22 @@ module.exports = (req, res, next) => {
     const { authorization } = req.headers // http 인증 시 header에 담아서 보냄
     // console.log("###########req.headers##########", req.headers)
     // console.log("###########authorization##########", authorization)
-    const [tokenType, tokenValue] = authorization.split(' ')
+    // const [tokenType, tokenValue] = authorization.split(' ')
+    const [tokenType, tokenValue] = (authorization || "").split(' ');
 
     if (tokenType !== 'Bearer') {
-        // 참보다 거짓일 경우로 하는 것이 편하다.
         res.status(401).send({
             errorMessage: '로그인 후 사용하세요1.',
         })
         return
     }
 
-    if (tokenValue == 'null') {
-        // 참보다 거짓일 경우로 하는 것이 편하다.
-        res.status(401).send({
-            errorMessage: '로그인 후 사용하세요2.',
-        })
-        return
-    }
+    // if (tokenValue == 'null') {
+    //     res.status(401).send({
+    //         errorMessage: '로그인 후 사용하세요2.',
+    //     })
+    //     return
+    // }
 
     try {
         const { userId } = jwt.verify(tokenValue, 'my-secret-key')
