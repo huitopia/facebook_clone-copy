@@ -5,19 +5,19 @@ const Comments = require('../schemas/comments')
 const authMiddleware = require('../middlewares/auth-middleware')
 
 // 댓글 등록
-router.post('/comments/:postId', authMiddleware, async (req, res) => {
+router.post('/post/:postId/comments', authMiddleware, async (req, res) => {
     const { postId } = req.params
     const { content } = req.body
     const { user } = res.locals
-    const userId = user["userId"]
-    const userName = user["userName"]
+    const userId = user.userId
     // console.log("##########userId##########: ", userId)
+    const userName = user["userName"]
     // console.log("##########userName##########: ", userName)
-    const createAt = new Date(+new Date() + 3240 * 10000)
+    const createdAt = new Date(+new Date() + 3240 * 10000)
       .toISOString()
       .replace('T', ' ')
       .replace(/\..*/, '')
-      
+
     try {
         if (content === undefined) {
             res.status(401).send({
@@ -31,7 +31,7 @@ router.post('/comments/:postId', authMiddleware, async (req, res) => {
         if (recentComment.length !== 0) {
             commentId = recentComment[0]["commentId"] + 1
         }
-        await Comments.create({ commentId, postId, userId, userName, content, createAt })
+        await Comments.create({ commentId, postId, userId, userName, content, createdAt })
         res.status(201).send({
             result: "댓글 등록 완료"
         })
@@ -46,7 +46,7 @@ router.post('/comments/:postId', authMiddleware, async (req, res) => {
 })
 
 // 댓글 조회
-router.get('/comments/:postId', async (req, res) => {
+router.get('/post/:postId/comments', async (req, res) => {
     const { postId } = req.params
     // console.log("###########postId##########", postId)
     try {
@@ -61,22 +61,22 @@ router.get('/comments/:postId', async (req, res) => {
 })
 
 // 댓글 수정
-router.put('/comments/:commentId', authMiddleware, async (req, res) => {
+router.put('/post/:postId/comments/:commentId', authMiddleware, async (req, res) => {
     const { commentId } = req.params
     const { content } = req.body
     const { user } = res.locals
     const commentUser = await Comments.findOne({ commentId })
 
-    const tokenUserId = user["userId"]
+    const tokenUserId = user.userId
     // console.log("##########tokenUserId##########: ", tokenUserId)
     const dbUserId = commentUser["userId"]
     // console.log("##########dbUserId##########: ", dbUserId)
 
     if (tokenUserId === dbUserId && content !== undefined) {
         await Comments.updateOne({ commentId }, { $set: { content } })
-        console.log("#######content#######:", content)
+        // console.log("#######content#######:", content)
         res.status(201).send({
-            result: "댓글 등록 완료"
+            result: "댓글 수정 완료"
         })
     } else {
         res.status(400).send({
@@ -86,12 +86,12 @@ router.put('/comments/:commentId', authMiddleware, async (req, res) => {
 })
 
 // 댓글 삭제
-router.delete('/comments/:commentId', authMiddleware, async(req, res) => {
+router.delete('/post/:postId/comments/:commentId', authMiddleware, async(req, res) => {
     const { user } = res.locals
     const { commentId } = req.params
     const commentUser = await Comments.findOne({ commentId })
 
-    const tokenUserId = user["userId"]
+    const tokenUserId = user.userId
     // console.log("##########tokenUserId##########: ", tokenUserId)
     const dbUserId = commentUser["userId"]
     // console.log("##########dbUserId##########: ", dbUserId)

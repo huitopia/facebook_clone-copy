@@ -55,14 +55,14 @@ router.post('/register', async (req, res) => {
     // bcrypt
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    console.log("bcrypt 작동 확인")
+    // console.log("bcrypt 작동 확인")
 
-    const createAt = new Date(+new Date() + 3240 * 10000)
+    const createdAt = new Date(+new Date() + 3240 * 10000)
       .toISOString()
       .replace('T', ' ')
       .replace(/\..*/, '')
     
-    await User.create({ userId, userName, userEmail, hashedPassword, createAt });
+    await User.create({ userId, userName, userEmail, hashedPassword, createdAt });
 
     res.status(201).send({
       result: "회원가입 완료"
@@ -83,9 +83,9 @@ const loginSchema = Joi.object({
 // 로그인
 router.post('/login', async (req, res) => {
   const { userEmail, password } = await loginSchema.validateAsync(req.body)
-  console.log( userEmail, password )
+  // console.log( userEmail, password )
   const user = await User.findOne({ userEmail }).exec()
-  console.log(user)
+  // console.log(user)
   if (!user) {
     res.status(400).send({
       errorMessage: "이메일 또는 비밀번호를 확인해주세요.", success: false
@@ -107,6 +107,20 @@ router.post('/login', async (req, res) => {
     })
     return
   }
+})
+
+// 로그인 인증
+router.get('/me', authMiddleware, async(req, res) => {
+  const { user } = res.locals
+  // console.log("##########사용자 정보##########", res.locals)
+  res.send({
+    user: {
+      userId:user.userId,
+      userEmail:user.userEmail,
+      userName:user.userName
+    }
+  })
+
 })
 
 module.exports = router
