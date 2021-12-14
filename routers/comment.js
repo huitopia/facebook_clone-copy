@@ -17,7 +17,7 @@ router.post('/comments/:postId', authMiddleware, async (req, res) => {
       .toISOString()
       .replace('T', ' ')
       .replace(/\..*/, '')
-
+      
     try {
         if (content === undefined) {
             res.status(401).send({
