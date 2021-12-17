@@ -1,0 +1,41 @@
+const express = require('express')
+const cors = require('cors')
+app.use(cors())
+const app = express()
+const port = 3000
+const path = require('path');
+const jwt = require('jsonwebtoken')
+const authMiddleware = require('./middlewares/auth-middleware')
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger-output')
+
+
+
+// const corsOptions = {
+//     origin: '*', 
+//     credentials: true,
+// }
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+const postsRouter = require('./routers/posts')
+const userRouter = require('./routers/user')
+const commentRouter = require('./routers/comment')
+const mypageRouter = require('./routers/mypage')
+
+const connect = require('./schemas')
+connect()
+
+app.use(express.urlencoded({ extended: false }))
+// app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json())
+
+app.use('/api', express.urlencoded({ extended: false }), postsRouter)
+app.use('/api', express.urlencoded({ extended: false }), userRouter)
+app.use('/api', express.urlencoded({ extended: false }), commentRouter)
+app.use('/api', express.urlencoded({ extended: false }), mypageRouter)
+
+app.listen(port, () => {
+    console.log(`listening at http://localhost:${port}`)
+})
